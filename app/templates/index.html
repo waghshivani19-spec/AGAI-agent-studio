@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_name }} · AI Agent Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ───── Library ───── -->
+  <aside class="library" aria-label="Library">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <h1>{{ app_name }}</h1>
+        <p>Research agent · {{ model }}</p>
+      </div>
+    </div>
+
+    <button id="new-chat" class="btn btn-primary">New chat</button>
+
+    <section>
+      <h2>Where to look</h2>
+      <div class="segmented" id="mode" role="radiogroup" aria-label="Search mode">
+        <button role="radio" aria-checked="true"  data-mode="auto">Auto</button>
+        <button role="radio" aria-checked="false" data-mode="docs">My files</button>
+        <button role="radio" aria-checked="false" data-mode="web">Web</button>
+        <button role="radio" aria-checked="false" data-mode="hybrid">Both</button>
+      </div>
+      <p class="hint" id="mode-hint">Atlas decides whether to use your files, the web, or neither.</p>
+    </section>
+
+    <section class="docs">
+      <h2>Your files</h2>
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="{{ accept }}" hidden>
+        <strong>Add a file</strong>
+        <span>PDF, Word, text or Markdown</span>
+      </label>
+      <p class="hint" id="upload-status" role="status"></p>
+      <ul id="doc-list" class="doc-list"></ul>
+    </section>
+
+    <p class="health" id="health" hidden></p>
+  </aside>
+
+  <!-- ───── Conversation ───── -->
+  <main class="chat" aria-label="Conversation">
+    <div id="messages" class="messages" aria-live="polite">
+      <div class="empty" id="empty">
+        <h2>Ask anything. Atlas shows its work.</h2>
+        <p>It picks a strategy, searches your files or the web, checks its own evidence, then answers with citations.</p>
+        <div class="suggest">
+          <button data-q="What are the most important points in my uploaded documents?">Summarise my files</button>
+          <button data-q="What changed in AI regulation this month?">What changed in AI regulation this month?</button>
+          <button data-q="Compare what my documents say with the latest public information on the same topic.">Compare my files with the web</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="composer" class="composer" autocomplete="off">
+      <textarea id="input" rows="1" placeholder="Ask a question…" aria-label="Message"></textarea>
+      <button id="send" class="btn btn-primary" type="submit">Send</button>
+    </form>
+  </main>
+
+  <!-- ───── Trace ───── -->
+  <aside class="trace" aria-label="Run trace">
+    <h2>Run trace</h2>
+    <p class="hint" id="trace-empty">Each step the agent takes will appear here as it happens.</p>
+    <div id="route" class="route" hidden></div>
+    <ol id="steps" class="steps"></ol>
+    <div id="sources-wrap" hidden>
+      <h2>Sources</h2>
+      <ol id="sources" class="sources"></ol>
+    </div>
+  </aside>
+
+</div>
+<script src="{{ url_for('static', path='app.js') }}"></script>
+</body>
+</html>
